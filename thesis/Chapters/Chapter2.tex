@@ -1,0 +1,64 @@
+\setcounter{reaction}{0}%
+
+
+\chapter{Manuscript title} \label{chapter2}
+
+author$^1$, author$^2$, and author$^1$ \\[30pt]
+$^1$Department of Atmospheric and Oceanic Sciences, McGill University, Montreal, Quebec, Canada \\
+$^2$Department of Chemistry, McGill University, Montreal, Quebec, Canada\\[30pt]
+\textit{The following chapter is a manuscript in preparation to be submitted to the journal xx. xx conceptualized the project. ..... xx wrote the manuscript with contributions from all co-authors.}
+
+\cleardoublepage
+\section{Abstract}
+
+\section{Introduction} \label{sec:intro}
+
+\section{Methods} \label{sec:methods}
+
+\subsection{Examples of adding a long table}
+Table~\ref{tab:1} lists xxxxxxx.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Example of adding a long table
+\begin{table}[tbp]
+    \caption{Table caption.}
+    \fontsize{11}{12}\selectfont
+    \centering
+    \begin{tabular}{l c c l} 
+    \tophline
+    $X_1$ &  $X_2$~$^\textrm{a}$ & $X_3$ & $X_4$~$^\textrm{b}$  \\
+    \middlehline
+    \multicolumn{4}{c}{Category} \\
+    $x_1$ & $x_2$ & 4 & \citet{Gregoriou:1979} \\
+    $x_1$ & $x_2$ & 4 & \citet{Gregoriou:1979} \\
+    \bottomhline
+    \end{tabular}
+    \label{tab:1}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtocounter{table}{-1}
+\begin{table}[tbp]
+    \caption{Continued.}
+    \fontsize{11}{12}\selectfont
+    \centering
+    \begin{tabular}{l c c l} 
+    \tophline
+    $X_1$ &  $X_2$~$^\textrm{a}$ & $X_3$ & $X_4$~$^\textrm{b}$  \\
+    \middlehline
+    \multicolumn{4}{c}{Category} \\
+    $x_1$ & $x_2$ & 4 & \citet{Gregoriou:1979} \\
+     \bottomhline
+    \end{tabular}
+    \belowtable{$^\textrm{a}$ Footnote1. \\
+    $^\textrm{b}$ Footnote2.}
+\end{table}
+
+
+
+\section{Results and Discussion} \label{sec:result}
+
+
+\section{Conclusion}  \label{sec:concl}
+
+
+\section{Supplemental Information}
+\label{sec:SI}

@@ -1,0 +1,104 @@
+\documentclass[12pt,fleqn]{graphicsclass}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\setlength{\mathindent}{0pt}
+\usepackage{palatino}
+\usepackage{amssymb} 
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage[labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{times} %Use times new roman
+\captionsetup[table]{font = {stretch=1.35}}
+\captionsetup[figure]{font = {stretch=1.35}}
+\usepackage[margin=1in]{geometry} %1 inch margins
+\linespread{1.6} %double spacing
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\usepackage{overpic}
+\usepackage[all]{nowidow}
+\usepackage{caption}
+\captionsetup{justification=raggedright,singlelinecheck=false}
+\usepackage{nccmath}
+\definecolor{coolgrey}{rgb}{0.55, 0.57, 0.67}
+%Import the natbib package and sets a bibliography  and citation styles
+\usepackage{natbib}
+
+%\usepackage{enumitem}
+%\setlist{topsep=0.5em, itemsep=-1em}
+
+\title{
+{\textbf{Teaching LLM to play Quixo}}\\~\\
+{\large \textbf{Sergey Kunin-Bogoiavlenskij}}\\
+{\large Advisor: \textbf{Arseniy Trushin}}\\
+{\large Phystech School of Applied Mathematics and Computer Science \\ 
+	Moscow Institute of Physics and Technology, Dolgoprudny \\ 
+	May 2025 \\~\\~\\
+	A thesis submitted in partial fulfillment of the requirements of the degree of Bachelor of Science }\\
+}
+
+\setcounter{page}{2}\renewcommand{\thepage}{\roman{page}}
+
+\author{\textcopyright Sergey Kunin-Bogoiavlenskij, 2025}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+%\chapter*{Acknowledgements}
+%\label{sec:engack}
+%\addcontentsline{toc}{section}{\nameref{sec:engack}}
+
+\chapter*{Abstract}
+\label{sec:engAbstract}
+
+	This paper presents a study on teaching Large Language Models (LLMs) to play the board game Quixo. 
+	We explore various strategies and models to determine the most effective approach for training LLMs to excel in this strategic game. 
+	Our work includes implementing MinMax algorithm, leveraging MapReduce for efficient computation, and experimenting with different language models such as YandexGPT and torch.nn.Transformer. 
+	Additionally, we investigate the impact of multimodal input, including voice commands, and evaluate different notation systems for representing game moves. 
+	The findings aim to provide insights into the capabilities of LLMs in strategic gameplay and the effectiveness of various training methods. 
+\vspace{1em}
+
+\noindent{\textit{Key Words: Large Language Models; Quixo; MinMax; MapReduce.}}
+\addcontentsline{toc}{section}{\nameref{sec:engAbstract}} 
+
+
+
+%\chapter*{Abrégé}
+%\label{sec:frAbstract}
+%\addcontentsline{toc}{section}{\nameref{sec:frAbstract}}
+
+
+%\chapter*{Thesis Structure and Author Contributions}
+%The thesis contains a background discussion, a paper manuscript, and some ideas for future work. Chapter~\ref{chapter3} discusses xxxx. 
+%
+%\label{sec:ded}
+%\addcontentsline{toc}{section}{\nameref{sec:ded}}
+
+
+\tableofcontents
+% List of tables and figures if needed
+%\listoffigures %
+%\addcontentsline{toc}{section}{\listfigurename}
+%\listoftables
+%\addcontentsline{toc}{section}{\listtablename}
+
+\clearpage 
+\pagenumbering{arabic} % restart page numbers at one, now in arabic style
+
+
+%% start of mainmatter
+\input{Chapters/Chapter1.tex}
+%\input{Chapters/Chapter2.tex}
+%\input{Chapters/Chapter3.tex}
+
+% Use copernicus citation style
+%\bibliographystyle{copernicus}
+\bibliographystyle{plain}
+\nocite{*}
+\bibliography{references}
+
+
+\end{document}

@@ -1,0 +1,39 @@
+\chapter{Introduction} \label{chapter1}
+
+ \section{Motivation}  \label{sec:intro}
+
+Recent advancements in Large Language Models (LLMs) have opened exciting possibilities for applying AI to complex tasks, including strategic game playing. This research investigates the application of LLMs to Quixo, a challenging board game requiring spatial reasoning and strategic planning.  While LLMs have demonstrated proficiency in various language-based tasks, their ability to master games with a strong spatial component remains an open question. This study aims to explore the capacity of LLMs to learn and excel at Quixo, providing insights into their strategic learning capabilities and the effectiveness of different training methodologies.
+
+\section{Objectives}  \label{sec:objectives}
+Our study is structured around several key objectives.
+ First, we aim to implement and evaluate the performance of the MinMax algorithm, which was proposed in the recent article \cite{tanak2020quixo}. 
+ To handle the computational complexity, we employ MapReduce to efficiently distribute and process the calculations. Second, we train an LLM to play using the acquired full tree of win/loss game states.
+Then we compare the learning capabilities of different language models, including YandexGPT, torch.nn.Transformer, and convolutional neural networks (CNNs). 
+ This comparison will help us understand which models are best suited for learning the intricacies of Quixo.
+
+Additionally, we explore the potential of multimodal input, specifically voice commands, to enhance the interaction and learning process of the LLMs. 
+We also investigate various notation systems for representing game moves, including different visual and verbal methods, to determine the most effective approach for training and communication.
+
+Through this study, we aim to contribute to the understanding of LLMs' capabilities in strategic gameplay and provide insights into effective training methods and input modalities.
+
+\section{Quixo Rules} \label{sec:rules}
+
+This research focuses on the two-player version of Quixo.
+
+\subsection{Game Overview}
+
+Quixo is played on a 5x5 grid of cubes.  Initially, all 25 cubes have blank top faces. Players choose to play either crosses (X) or circles (O). The objective is to create a horizontal, vertical, or diagonal line of five cubes bearing the player's symbol.
+
+\subsection{Gameplay}
+
+Players take turns choosing and moving a cube according to the following rules:
+
+\begin{enumerate}
+    \item \textbf{Cube Selection:} A player selects a blank cube or a cube with their symbol from the periphery of the board.  In the first turn, only blank cubes are available.  A player cannot select a cube with their opponent's symbol.
+    \item \textbf{Symbol Change:} The selected cube is replaced with a cube bearing the player's symbol on its top face.
+    \item \textbf{Cube Placement:} The player pushes the row or column of cubes from which the selected cube was taken, inserting the new cube at the opposite end.  A player cannot place the cube back into the position from which it was just taken.
+\end{enumerate}
+
+\subsection{Game End}
+
+The game ends when a player creates and announces a line of five of their symbols.  A player who creates a line of five of their opponent's symbols loses.
