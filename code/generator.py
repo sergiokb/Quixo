@@ -16,24 +16,24 @@ def RandomCellType():
 def RandomNonEmptyCellType():
     return random.choice([ECellType.First, ECellType.Second])
 
-class ERowType(Enum):
-    Row = 0
-    Column = 1
+class ELineType(Enum):
+    Horizontal = 0
+    Vertical = 1
 
-def getRandomRowType():
-    return random.choice(list(ERowType))
+def getRandomLineType():
+    return random.choice(list(ELineType))
 
 class EMoveDirection(Enum):
-    Down = -1
-    Up = 1
+    Descending = -1
+    Ascending = 1
 
 def getRandomMoveDirection():
     return random.choice(list(EMoveDirection))
 
 class Move:
-    def __init__(self, cellType, rowType, row, column, direction):
+    def __init__(self, cellType, lineType, row, column, direction):
         self.cellType = cellType
-        self.rowType = rowType
+        self.lineType = lineType
         self.row = row
         self.column = column
         self.direction = direction
@@ -67,11 +67,11 @@ class GameState:
         return gameState
 
     def ApplyMove(self, move):
-        row_number = move.row if move.rowType == ERowType.Row else move.column
-        start_point = move.column if move.rowType == ERowType.Row else move.row
-        end_point = 0 if move.direction == EMoveDirection.Up else self.BoardSize - 1
+        row_number = move.row if move.lineType == ELineType.Horizontal else move.column
+        start_point = move.column if move.lineType == ELineType.Horizontal else move.row
+        end_point = 0 if move.direction == EMoveDirection.Ascending else self.BoardSize - 1
         self.SetCell(move.row, move.column, move.cellType)
-        self.PermuteRow(row_number, start_point, end_point, move.direction.value, move.rowType)
+        self.PermuteRow(row_number, start_point, end_point, move.direction.value, move.lineType)
 
     def checkFullRow(self, playerSymbol):
         for i in range(self.BoardSize):
@@ -88,10 +88,10 @@ class GameState:
         return self.checkFullRow(ECellType.First) or self.checkFullRow(ECellType.Second)
 
         
-    def PermuteRow(self, row_number, start, end, dir, rowType):
+    def PermuteRow(self, row_number, start, end, dir, lineType):
         if start > end:
             start, end = end, start  
-        if rowType == ERowType.Row:
+        if lineType == ELineType.Horizontal:
             self.Board_[row_number, start:end+1] = np.roll(self.Board_[row_number, start:end+1], dir)
         else: 
             self.Board_[start:end+1, row_number] = np.roll(self.Board_[start:end+1, row_number], dir)
@@ -103,12 +103,12 @@ def getRandomStartPosition():
     return state
 
 
-def SerializeMoveAsString(move):
-    if move.rowType == ERowType.Row:
-        dir = "right" if move.direction == EMoveDirection.Up else "left"
+def SerializeMoveAsString_v3(move):
+    if move.lineType == ELineType.Horizontal:
+        dir = "right" if move.direction == EMoveDirection.Ascending else "left"
         sliding = f"slide to the {dir}, "
     else:
-        dir = "down" if move.direction == EMoveDirection.Up else "up"
+        dir = "down" if move.direction == EMoveDirection.Ascending else "up"
         sliding = f"slide {dir}, "
     taking = f"Take the cube from the row {move.row}, column {move.column}, "
     putting = f"putting {move.cellType.value}"
@@ -117,10 +117,10 @@ def SerializeMoveAsString(move):
 
 
 move_to_dir = {
-    (ERowType.Row, EMoveDirection.Up): "right",
-    (ERowType.Row, EMoveDirection.Down): "left",
-    (ERowType.Column, EMoveDirection.Up): "down",
-    (ERowType.Column, EMoveDirection.Down): "up",
+    (ELineType.Horizontal, EMoveDirection.Ascending): "right",
+    (ELineType.Horizontal, EMoveDirection.Descending): "left",
+    (ELineType.Vertical, EMoveDirection.Ascending): "down",
+    (ELineType.Vertical, EMoveDirection.Descending): "up",
 }
 
 piece_names = ["piece", "cube", "block"]
@@ -146,8 +146,8 @@ put_variants = ["putting", "placing", "inserting"]
 take_variants = ["take", "withdraw", "grab", "pick"]
 
 
-def SerializeMoveAsString_1(move):
-    dir = move_to_dir[(move.rowType, move.direction)]
+def SerializeMoveAsString_v4(move):
+    dir = move_to_dir[(move.lineType, move.direction)]
     slide = f"slide {random.choice(dir_names[dir])}, "
     piece = random.choice(piece_names)
     
@@ -157,6 +157,42 @@ def SerializeMoveAsString_1(move):
     take = f"{random.choice(take_variants)} the {piece} from the {row_col[first]}, {row_col[second]}, "
     put = f"{random.choice(put_variants)} {random.choice(cell_names[move.cellType])}"
     return f"{take.capitalize()}{slide}{put}.\n"
+
+spiral = \
+  [(0, i) for i in range(4)] \
++ [(i, 4) for i in range(4)] \
++ [(4, i) for i in range(4, 0, -1)] \
++ [(i, 0) for i in range(4, 0, -1)]
+
+cyclic_dir = {"up": ['C', 'N', None, 'P'],
+              "down": [None, 'P', 'C', 'N'],
+              "right": ['P', 'C', 'N', None],
+              "left": ['N', None, 'P', 'C'],
+              }
+
+def SerializeMoveAsString_cyclic1(move):
+    if move.lineType == ELineType.Horizontal:
+        dir = "right" if move.direction == EMoveDirection.Ascending else "left"
+    else:
+        dir = "down" if move.direction == EMoveDirection.Ascending else "up"
+    spiral_index = spiral.index((move.row, move.column))
+    side, num = spiral_index // 4, spiral_index % 4
+    c_dir = cyclic_dir[dir][side]
+    return f"{side} {num} {c_dir} {move.cellType.value}\n"
+
+
+def SerializeMoveAsString_v6(move):
+    if move.lineType == ELineType.Horizontal:
+        dir = "right" if move.direction == EMoveDirection.Ascending else "left"
+        sliding = f"slide to the {dir}, "
+    else:
+        dir = "down" if move.direction == EMoveDirection.Ascending else "up"
+        sliding = f"slide {dir}, "
+    spiral_index = spiral.index((move.row, move.column))
+    side, num = spiral_index // 4, spiral_index % 4
+    taking = f"In cyclic notation take the cube from the side {side}, number {num}, "
+    putting = f"putting {move.cellType.value}"
+    return f"{taking}{sliding}{putting}\n"
 
 
 def GetRandomCell(state, cellType):
@@ -170,17 +206,32 @@ def GetRandomCell(state, cellType):
 
 def getRandomMove(state, cellType):
     i, j = GetRandomCell(state, cellType)
-    rowType = getRandomRowType()
+    lineType = getRandomLineType()
     
-    if i == 0 or i == BOARD_SIZE - 1:
-        dir = EMoveDirection.Down if i == 0 else EMoveDirection.Up if rowType == ERowType.Column else getRandomMoveDirection()
+    if i == 0:
+        if j == 0:
+            dir = EMoveDirection.Descending
+        elif j == BOARD_SIZE - 1:
+            dir = EMoveDirection.Descending if lineType == ELineType.Vertical else EMoveDirection.Ascending
+        else:
+            dir = EMoveDirection.Descending if lineType == ELineType.Vertical else getRandomMoveDirection()
+    elif i == BOARD_SIZE - 1:
+        if j == BOARD_SIZE - 1:
+            dir = EMoveDirection.Ascending
+        elif j == 0:
+            dir = EMoveDirection.Ascending if lineType == ELineType.Vertical else EMoveDirection.Descending
+        else:
+            dir = EMoveDirection.Ascending if lineType == ELineType.Vertical else getRandomMoveDirection()
     else:
-        dir = EMoveDirection.Down if j == 0 else EMoveDirection.Up if rowType == ERowType.Row else getRandomMoveDirection()
+        if lineType == ELineType.Horizontal:
+            dir = EMoveDirection.Descending if j == 0 else EMoveDirection.Ascending
+        else:
+            dir = getRandomMoveDirection()
+    
+    return Move(cellType, lineType, i, j, dir)
 
-    return Move(cellType, rowType, i, j, dir)
 
-
-STATES_NUMBER = 100
+STATES_NUMBER = 5
 
 if __name__ == "__main__":
     Q = deque([(GameState(), ECellType.First)])
@@ -188,11 +239,10 @@ if __name__ == "__main__":
         state, cellType = Q.popleft()
         if state.IsFinish():
             Q.appendleft((GameState(), ECellType.First))
-            print("\n\nOHOHOHOHOHOHO!!!!!\n\n")
         else:
             print("------------\n")
             move = getRandomMove(state, cellType)
-            print(state.SerializeAsString() + "\n" + SerializeMoveAsString_1(move))
+            print(state.SerializeAsString() + "\n" + SerializeMoveAsString_cyclic1(move))
             state.ApplyMove(move)
             print(state.SerializeAsString())
             Q.append((state, GetNextMove(cellType)))
